@@ -203,7 +203,7 @@ class VigenereSolver(VigenereStatsMixin):
                  window: Optional[int] = None, step: Optional[int] = None,
                  use_windowed_keys: bool = True,
                  anneal: float = 0.0,
-                 lm_weight: float = 0.65,
+                 lm_weight: float = 0.65, # +4.... Nice.
                  auto_ws: bool = True,
                  ws_beam: int = 6,
                  ws_passes: int = 2):
