@@ -178,4 +178,4 @@ git clone https://github.com/supasuge/VigenereSolver-ng.git
 - [ ] Show top $k$ plaintext candidates
 - [ ] Better statistics display UI/UX
 - [ ] Better documentation on the "how it works page", fully describe how the pipeline works and mathematics involved at each step, turn, twist, and knob.
-
+- [ ] Debug `Dockerfile`/`docker-compose.yml`
