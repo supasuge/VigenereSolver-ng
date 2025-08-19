@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>How it Works</h2>
+  <p class="muted">A deeper look at the pipeline and the mathematics used to break Vigenère.</p>
+
+  <ol class="how-list">
+    <li>
+      <h3>1) Tokenization &amp; normalization</h3>
+      <p>Input is normalized to an <em>A–Z</em> stream while preserving original layout tokens (spaces, punctuation, digits, case, diacritics). Decryption is done on the clean stream and then projected back to restore formatting.</p>
+    </li>
+
+    <li>
+      <h3>2) Vigenère model</h3>
+      <p>For letters indexed as $0..25$, with key $K$ of length $m$:
+      \[
+        C_i \equiv (P_i + K_{i \bmod m}) \pmod{26}, \qquad
+        P_i \equiv (C_i - K_{i \bmod m}) \pmod{26}.
+      \]</p>
+    </li>
+
+    <li>
+      <h3>3) Statistics: IoC, Friedman, Kasiski</h3>
+      <p>Index of coincidence (IoC) for counts $f_j$ and $n$ letters:
+      \[
+        \mathrm{IoC} = \frac{\sum_{j=0}^{25} f_j(f_j - 1)}{n(n-1)}.
+      \]
+      A crude key-length estimate (Friedman) with $\kappa_E\!\approx\!0.066,\ \kappa_R\!=\!1/26$:
+      \[
+        \hat m \approx \frac{\kappa_E - \kappa_R}{\mathrm{IoC}-\kappa_R}.
+      \]
+      Kasiski counts factors of repeated-gram spacings to suggest $m$.</p>
+    </li>
+
+    <li>
+      <h3>4) Periodogram &amp; auto (window, step)</h3>
+      <p>We compute the coincidence periodogram
+      \[
+        p(\ell)=\frac{1}{N-\ell}\sum_{i=0}^{N-\ell-1}\mathbf{1}\{s_i=s_{i+\ell}\},
+      \]
+      averaged over sliding windows (size $W$, step $S$). A beam search tunes $(W,S)$ using a ciphertext-only objective that blends peakiness, cross-third stability, and a weak prior near multiples of $\hat m$.</p>
+    </li>
+
+    <li>
+      <h3>5) Candidate $m$ and initial key</h3>
+      <p>We combine: top lags of $p(\ell)$, Kasiski factors, and $\hat m$ to form candidates. For each $m$, we vote per coset using frequency correlation, then refine with short passes.</p>
+    </li>
+
+    <li>
+      <h3>6) Interpolated Kneser–Ney LM (3–5-gram)</h3>
+      <p>Let $D$ be the discount and $c(\cdot)$ n-gram counts. For order $n$:
+      \[
+        P_{\text{KN}}(w\mid h) =
+          \frac{\max(c(hw)-D,0)}{\sum_{x}c(hx)} +
+          \lambda(h)\,P_{\text{KN}}(w\mid \text{suffix}(h)),
+      \]
+      with
+      \[
+        \lambda(h)=\frac{D\cdot N_1^{+}(h\cdot)}{\sum_x c(hx)},\qquad
+        P_{\text{KN}}(w) \propto N_1^{+}(\cdot w).
+      \]
+      We score plaintext by average negative log-probability (NLL). The final objective blends LM NLL with legacy plaintext fitness:
+      \[
+        \text{Score} = \alpha\,\text{NLL}_{\text{KN}} + (1-\alpha)\,\text{Legacy}.
+      \]
+      Key optimization uses coordinate descent on cosets with optional simulated annealing.</p>
+    </li>
+
+    <li>
+      <h3>7) Readable rendering</h3>
+      <p>Decrypted letters are reinserted into the original token layout. If the source was an unspaced blob, an inexpensive DP word segmenter proposes boundaries (toggleable).</p>
+    </li>
+  </ol>
+
+  <div class="actions">
+    <a class="btn" href="{{ url_for('index') }}">Try it</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>Results</h2>
+
+  <div class="meta-grid">
+    <div><span class="k">Decoder</span><span class="v">{{ meta.decoder }}</span></div>
+    <div><span class="k">Passes</span><span class="v">{{ meta.passes }}</span></div>
+    <div><span class="k">LM weight</span><span class="v">{{ meta.lm_weight }}</span></div>
+    <div><span class="k">Anneal</span><span class="v">{{ meta.anneal }}</span></div>
+    <div><span class="k">Auto (w,s)</span><span class="v">{{ 'yes' if meta.auto_ws else 'no' }}</span></div>
+    <div><span class="k">Window</span><span class="v">{{ meta.window }}</span></div>
+    <div><span class="k">Step</span><span class="v">{{ meta.step }}</span></div>
+    <div><span class="k">WS beam/passes</span><span class="v">{{ meta.ws_beam }}/{{ meta.ws_passes }}</span></div>
+    <div><span class="k">Word seg</span><span class="v">{{ 'on' if not meta.no_seg else 'off' }}</span></div>
+    <div><span class="k">Blocks</span><span class="v">{{ meta.blocks_count }}</span></div>
+    <div><span class="k">Threads used</span><span class="v">{{ meta.workers_used }}</span></div>
+    <div><span class="k">Elapsed</span><span class="v">{{ '%.2fs'|format(meta.total_elapsed) }}</span></div>
+  </div>
+
+  <div class="actions">
+    <a class="btn" href="{{ url_for('index') }}">Decrypt more</a>
+    <a class="btn outline" href="{{ url_for('how_it_works') }}">How it Works</a>
+  </div>
+</section>
+
+{% for r in results %}
+<article class="card result">
+  <header class="result-head">
+    <div>
+      <h3>Block {{ r.index }}</h3>
+      <div class="keys">
+        <span class="key-label">Key</span>
+        <code class="key" id="key-{{ r.index }}">{{ r.key }}</code>
+        <button class="btn tiny" data-copy="#key-{{ r.index }}">Copy</button>
+      </div>
+    </div>
+    <div class="kv">
+      <span class="pill">KeyLen {{ r.key_length }}</span>
+      <span class="pill">IoC {{ '%.4f'|format(r.ioc) }}</span>
+      <span class="pill">Score {{ '%.4f'|format(r.score) }}</span>
+      <span class="pill">Kasiski {{ r.kasiski }}</span>
+      <span class="pill">Time {{ '%.2fs'|format(r.elapsed) }}</span>
+    </div>
+  </header>
+
+  <details class="preview" open>
+    <summary>Decrypted plaintext</summary>
+    <pre class="plaintext" id="pt-{{ r.index }}">{{ r.preview }}</pre>
+    {% if r.full|length > r.preview|length %}
+    <div class="actions">
+      <button class="btn tiny" data-copy="#pt-{{ r.index }}">Copy</button>
+      <button class="btn tiny" data-expand="#pt-{{ r.index }}" data-full="{{ r.full|tojson|safe }}">Expand full</button>
+    </div>
+    {% else %}
+    <div class="actions">
+      <button class="btn tiny" data-copy="#pt-{{ r.index }}">Copy</button>
+    </div>
+    {% endif %}
+  </details>
+</article>
+{% endfor %}
+{% endblock %}

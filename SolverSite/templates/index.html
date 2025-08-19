@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card hero">
+  <h1 class="hero-title">Crack Vigenère with a classy LM-powered solver</h1>
+  <p class="hero-sub">Paste ciphertext directly or use triple-quoted blocks. The solver auto-tunes analysis windows, finds candidate key lengths, and optimizes the key with a Kneser–Ney language model.</p>
+</section>
+
+<section class="card">
+  <h2>Input</h2>
+  <p class="muted">You can use triple-quoted blocks like <code>""" YOUR CIPHERTEXT """</code> or paste raw text directly. Non-letters are preserved in the final rendering.</p>
+
+  <form action="{{ url_for('solve') }}" method="post" class="form-grid">
+    <div class="form-field">
+      <label for="ciphertext">Ciphertext</label>
+      <textarea id="ciphertext" name="ciphertext" rows="12" placeholder=""""
+LXFOPVEFRNHR...
+""""></textarea>
+    </div>
+
+    <details class="options">
+      <summary>Solver options</summary>
+      <div class="options-grid">
+        <div class="form-field">
+          <label for="decoder">Decoder</label>
+          <select id="decoder" name="decoder">
+            <option value="lm" selected>KN Language Model (recommended)</option>
+            <option value="legacy">Legacy (frequency/IoC)</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="passes">Optimization passes</label>
+          <input type="number" id="passes" name="passes" min="1" max="50" value="5">
+        </div>
+
+        <div class="form-field">
+          <label for="lm_weight">LM weight</label>
+          <input type="number" step="0.01" id="lm_weight" name="lm_weight" value="0.65">
+          <p class="hint">Blend KN-LM vs legacy fitness (0..1)</p>
+        </div>
+
+        <div class="form-field">
+          <label for="anneal">Anneal</label>
+          <input type="number" step="0.01" id="anneal" name="anneal" value="0.0">
+          <p class="hint">&gt;0 enables occasional uphill LM moves</p>
+        </div>
+
+        <div class="form-field">
+          <label class="checkbox">
+            <input type="checkbox" name="auto_ws" checked>
+            <span>Auto-tune window &amp; step</span>
+          </label>
+        </div>
+
+        <div class="form-field">
+          <label for="window">Window (override)</label>
+          <input type="number" id="window" name="window" placeholder="e.g., 600">
+        </div>
+
+        <div class="form-field">
+          <label for="step">Step (override)</label>
+          <input type="number" id="step" name="step" placeholder="e.g., 150">
+        </div>
+
+        <div class="form-field">
+          <label for="ws_beam">WS beam</label>
+          <input type="number" id="ws_beam" name="ws_beam" value="6">
+        </div>
+
+        <div class="form-field">
+          <label for="ws_passes">WS passes</label>
+          <input type="number" id="ws_passes" name="ws_passes" value="2">
+        </div>
+
+        <div class="form-field">
+          <label class="checkbox">
+            <input type="checkbox" name="no_seg">
+            <span>Disable word segmentation (for blobs)</span>
+          </label>
+        </div>
+      </div>
+    </details>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Decrypt</button>
+      <a class="btn outline" href="{{ url_for('how_to_use') }}">How to Use</a>
+      <a class="btn outline" href="{{ url_for('how_it_works') }}">How it Works</a>
+    </div>
+  </form>
+</section>
+
+<section class="card subtle">
+  <h3>Example formats</h3>
+  <p class="muted">You can paste raw ciphertext directly, or use triple-quoted blocks for multiple inputs:</p>
+  <pre class="code"># Raw text (single input):
+PXWZB ...
+
+# Triple-quoted blocks (multiple inputs):
+"""
+PXWZB ...
+"""
+"""
+ANOTHER BLOCK ...
+"""</pre>
+</section>
+{% endblock %}

@@ -1,0 +1,10 @@
+OFTHE :  0.18        ANDTH :  0.07        CTION :  0.05
+ATION :  0.17        NDTHE :  0.07        WHICH :  0.05
+INTHE :  0.16        ONTHE :  0.07        THESE :  0.05
+THERE :  0.09        EDTHE :  0.06        AFTER :  0.05
+INGTH :  0.09        THEIR :  0.06        EOFTH :  0.05
+TOTHE :  0.08        TIONA :  0.06        ABOUT :  0.04
+NGTHE :  0.08        ORTHE :  0.06        ERTHE :  0.04
+OTHER :  0.07        FORTH :  0.06        IONAL :  0.04
+ATTHE :  0.07        INGTO :  0.06        FIRST :  0.04
+TIONS :  0.07        THECO :  0.05        WOULD :  0.04

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>How to Use</h2>
+  <ol class="how-list">
+    <li>
+      <h3>1) Paste ciphertext</h3>
+      <p>Use one or more triple-quoted blocks in the textarea:</p>
+      <pre class="code">"""
+LXFOPVEFRNHR...
+"""
+"""
+ANOTHER BLOCK...
+"""</pre>
+    </li>
+
+    <li>
+      <h3>2) (Optional) Adjust options</h3>
+      <ul>
+        <li><strong>Decoder</strong>: <em>KN Language Model</em> (recommended) or <em>Legacy</em>.</li>
+        <li><strong>Optimization passes</strong>: more passes may improve keys on tough texts.</li>
+        <li><strong>Auto-tune window/step</strong>: on by default; you can override <em>window</em>/<em>step</em>.</li>
+        <li><strong>Word segmentation</strong>: uncheck to keep raw A–Z if your plaintext is already spaced.</li>
+      </ul>
+    </li>
+
+    <li>
+      <h3>3) Run &amp; read results</h3>
+      <p>Each block shows key, metrics (IoC, score, Kasiski), timing, a preview, and one-click copy. Expand to view the full plaintext.</p>
+    </li>
+
+    <li>
+      <h3>4) Minimal JSON API</h3>
+      <pre class="code">POST /api/solve
+Content-Type: application/json
+
+{
+  "ciphertext": "&#34;&#34;&#34;\nLXFOPVEFRNHR...\n&#34;&#34;&#34;",
+  "decoder": "lm",
+  "passes": 5,
+  "auto_ws": true
+}</pre>
+    </li>
+
+    <li>
+      <h3>5) Docker tips</h3>
+      <pre class="code">docker run --rm -p 8000:8000 \
+  -e SOLVER_THREADS_MAX=4 \
+  -e LANG_PATH=/app/language_data.json \
+  yourimage:tag gunicorn -w 2 -b 0.0.0.0:8000 app:create_app</pre>
+      <p>Threading is auto-capped per container; no UI control is exposed.</p>
+    </li>
+  </ol>
+
+  <div class="actions">
+    <a class="btn" href="{{ url_for('index') }}">Start decrypting</a>
+    <a class="btn outline" href="{{ url_for('how_it_works') }}">Learn the math</a>
+  </div>
+</section>
+{% endblock %}

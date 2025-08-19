@@ -1,0 +1,10 @@
+TION :  0.31        OTHE :  0.16        THEM :  0.12
+NTHE :  0.27        TTHE :  0.16        RTHE :  0.12
+THER :  0.24        DTHE :  0.15        THEP :  0.11
+THAT :  0.21        INGT :  0.15        FROM :  0.10
+OFTH :  0.19        ETHE :  0.15        THIS :  0.10
+FTHE :  0.19        SAND :  0.14        TING :  0.10
+THES :  0.18        STHE :  0.14        THEI :  0.10
+WITH :  0.18        HERE :  0.13        NGTH :  0.10
+INTH :  0.17        THEC :  0.13        IONS :  0.10
+ATIO :  0.17        MENT :  0.12        ANDT :  0.10
