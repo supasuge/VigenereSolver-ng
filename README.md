@@ -2,6 +2,7 @@
 
 VigenereSolver-ng is an advanced toolkit for analyzing and breaking Vigenère ciphers, designed for cryptanalysis research and educational purposes. It combines classical statistical attacks with modern, language-model-based techniques to robustly estimate key length and recover the key, even on challenging ciphertexts.
 
+
 ## Table of Contents
 *See full README/documentation on how each section works in the [PDF document here](https://github.com/supasuge/VigenereSolver-ng/blob/main/VigenereSolver-ng~%20How%20it%20works.pdf)*.
 - [VigenereSolver-ng](#vigeneresolver-ng)
@@ -142,3 +143,39 @@ python SolverSite/solver.py --encrypt-file raw_text/kafka.txt --key SECRET --out
 * For information on how this solver works, as well as improvement's made please see the [PDF document here](https://github.com/supasuge/VigenereSolver-ng/blob/main/VigenereSolver-ng~%20How%20it%20works.pdf)
   * I was having trouble getting the equation's to render correctly when transferring from obsidian $\to$ [README.md](https://github.com/supasuge/VigenereSolver-ng/tree/main) so I instead simply exported the documentation to a PDF and uploaded it here :)
  
+### Web UI (In-Progress)
+- [x] **Light/Dark mode toggle**.
+- [x] **How to use**
+- [x] **How it works**
+
+<img width="2556" height="1238" alt="image" src="https://github.com/user-attachments/assets/9350fab7-d98c-48ed-86d9-791f7ff72502" />
+
+<img width="1153" height="1149" alt="image" src="https://github.com/user-attachments/assets/e87a1ff4-6e14-4cd0-b537-7e20392bcb90" />
+
+*Meanwhile in the background*
+
+<img width="949" height="264" alt="image" src="https://github.com/user-attachments/assets/c7c6adde-52e8-4f1b-86ac-8b3cb2993ec1" />
+
+<img width="1235" height="453" alt="image" src="https://github.com/user-attachments/assets/197dbf80-9554-43c5-8143-11a4d5bd8ed3" />
+
+<img width="2551" height="1229" alt="image" src="https://github.com/user-attachments/assets/b0c939b6-e657-42f1-acd3-5e662dd8292e" />
+
+<img width="1363" height="1021" alt="image" src="https://github.com/user-attachments/assets/8a3b0062-2966-41bb-aced-702a8a4801d0" />
+
+<img width="874" height="1063" alt="image" src="https://github.com/user-attachments/assets/c7d7d886-39cc-4b1a-89b3-6a65751484af" />
+
+<img width="2548" height="1234" alt="image" src="https://github.com/user-attachments/assets/dc6af2c8-b7b6-4e4f-b776-e01a8d5c88ed" />
+
+
+Try it out yourself! 
+
+```bash
+git clone https://github.com/supasuge/VigenereSolver-ng.git
+```
+
+#### TODO
+- [ ] Better parsing/normalization where possible
+- [ ] Show top $k$ plaintext candidates
+- [ ] Better statistics display UI/UX
+- [ ] Better documentation on the "how it works page", fully describe how the pipeline works and mathematics involved at each step, turn, twist, and knob.
+
