@@ -2,41 +2,7 @@
 
 VigenereSolver-ng is an advanced toolkit for analyzing and breaking Vigenère ciphers, designed for cryptanalysis research and educational purposes. It combines classical statistical attacks with modern, language-model-based techniques to robustly estimate key length and recover the key, even on challenging ciphertexts.
 
-A lot of the more advanced mechanisms were fully coded by ChatGPT, however it worked surprisingly well.
-
-## Table of Contents
-*See full README/documentation on how each section works in the [PDF document here](https://github.com/supasuge/VigenereSolver-ng/blob/main/VigenereSolver-ng~%20How%20it%20works.pdf)*.
-- [VigenereSolver-ng](#vigeneresolver-ng)
-  - [Table of Contents](#table-of-contents)
-  - [Key features and novel techniques](#key-features-and-novel-techniques)
-  - [How to use](#how-to-use)
-    - [Solve ciphertexts (the usual thing)](#solve-ciphertexts-the-usual-thing)
-    - [Generate test data](#generate-test-data)
-    - [Encrypt a plaintext file](#encrypt-a-plaintext-file)
-    - [Practical tuning knobs](#practical-tuning-knobs)
-    - [Troubleshooting quick refs](#troubleshooting-quick-refs)
-  - [1) Model of the cipher and the text](#1-model-of-the-cipher-and-the-text)
-  - [2) Coincidence, the periodogram, and key-length detection](#2-coincidence-the-periodogram-and-key-length-detection)
-    - [2.1 Coincidence probability at lag ell](#21-coincidence-probability-at-lag-ell)
-    - [2.2 Windowed periodogram and variance reduction](#22-windowed-periodogram-and-variance-reduction)
-    - [2.3 Peakiness and stability objective for wt](#23-peakiness-and-stability-objective-for-wt)
-  - [3) Friedman estimate and candidate key lengths](#3-friedman-estimate-and-candidate-key-lengths)
-  - [4) Initial key by coset correlation (per m)](#4-initial-key-by-coset-correlation-per-m)
-  - [5) Language model and the decryption objective](#5-language-model-and-the-decryption-objective)
-    - [5.1 Interpolated Kneser–Ney (KN) probabilities](#51-interpolated-kneserney-kn-probabilities)
-    - [5.2 Per-character negative log-likelihood (NLL)](#52-per-character-negative-log-likelihood-nll)
-    - [5.3 Legacy fitness and blended score](#53-legacy-fitness-and-blended-score)
-  - [6) Coordinate-wise optimization over the key](#6-coordinate-wise-optimization-over-the-key)
-    - [6.1 Decomposition of local influence](#61-decomposition-of-local-influence)
-    - [6.2 Monotone descent and convergence](#62-monotone-descent-and-convergence)
-  - [7) Effectiveness guarantees](#7-effectiveness-guarantees)
-    - [7.1 Consistency of key-length detection](#71-consistency-of-key-length-detection)
-    - [7.2 Correctness of coset shifts (initial key)](#72-correctness-of-coset-shifts-initial-key)
-    - [7.3 Optimality of the LM objective at the true key](#73-optimality-of-the-lm-objective-at-the-true-key)
-    - [7.4 Convergence of the key optimizer](#74-convergence-of-the-key-optimizer)
-  - [8) Auto-tuned window/step with LM tie-break](#8-auto-tuned-windowstep-with-lm-tie-break)
-  - [9) Readability segmentation (post-processing)](#9-readability-segmentation-post-processing)
-  - [10) Summary of guarantees](#10-summary-of-guarantees)
+A lot of the more advanced mechanisms were fully coded by ChatGPT, however it worked surprisingly well (Windowed coincidence periodogram, Jensen-Shannon divergence scoring).
 
 ---
 
