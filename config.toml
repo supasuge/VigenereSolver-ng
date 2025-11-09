@@ -1,0 +1,31 @@
+[solve]
+decoder = "tiny-lm"
+max_k = 40
+topk = 5
+bm_beam = 16
+bm_strip_top = 6
+classic_ngram_order = 4
+classic_alpha = 0.001
+wordlist = ""
+explain_dir = ""
+
+[encrypt]
+key = "SECRET"
+
+[explain]
+outdir = "explain_outputs"
+max_k = 40
+
+[bench]
+corpus = "bench_corpus"
+decoders = "tiny-lm,classic,legacy"
+out = "bench_results.csv"
+jobs = 0
+limit = 0
+max_k = 40
+passes = 6
+bm_beam = 16
+bm_strip_top = 6
+lm_path = ""
+
+
