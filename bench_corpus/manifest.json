@@ -1,0 +1,68 @@
+{
+  "samples": [
+    {
+      "id": "sample_001",
+      "plaintext": "sample_001/plaintext.txt",
+      "ciphertext": "sample_001/ciphertext.txt",
+      "keyfile": "sample_001/key.txt",
+      "key": "FXSJGXN",
+      "key_length": 7
+    },
+    {
+      "id": "sample_002",
+      "plaintext": "sample_002/plaintext.txt",
+      "ciphertext": "sample_002/ciphertext.txt",
+      "keyfile": "sample_002/key.txt",
+      "key": "WYIRHUXPLN",
+      "key_length": 10
+    },
+    {
+      "id": "sample_003",
+      "plaintext": "sample_003/plaintext.txt",
+      "ciphertext": "sample_003/ciphertext.txt",
+      "keyfile": "sample_003/key.txt",
+      "key": "XTGJRWKQ",
+      "key_length": 8
+    },
+    {
+      "id": "sample_004",
+      "plaintext": "sample_004/plaintext.txt",
+      "ciphertext": "sample_004/ciphertext.txt",
+      "keyfile": "sample_004/key.txt",
+      "key": "XYGW",
+      "key_length": 4
+    },
+    {
+      "id": "sample_005",
+      "plaintext": "sample_005/plaintext.txt",
+      "ciphertext": "sample_005/ciphertext.txt",
+      "keyfile": "sample_005/key.txt",
+      "key": "XOWUERGNBY",
+      "key_length": 10
+    },
+    {
+      "id": "sample_006",
+      "plaintext": "sample_006/plaintext.txt",
+      "ciphertext": "sample_006/ciphertext.txt",
+      "keyfile": "sample_006/key.txt",
+      "key": "UNODXX",
+      "key_length": 6
+    },
+    {
+      "id": "sample_007",
+      "plaintext": "sample_007/plaintext.txt",
+      "ciphertext": "sample_007/ciphertext.txt",
+      "keyfile": "sample_007/key.txt",
+      "key": "YKMKL",
+      "key_length": 5
+    },
+    {
+      "id": "sample_008",
+      "plaintext": "sample_008/plaintext.txt",
+      "ciphertext": "sample_008/ciphertext.txt",
+      "keyfile": "sample_008/key.txt",
+      "key": "GKNNKSGNHG",
+      "key_length": 10
+    }
+  ]
+}
