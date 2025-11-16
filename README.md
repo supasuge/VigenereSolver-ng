@@ -1,4 +1,4 @@
-# VigenereSolver-ng (modern edition)
+# VigenereSolver-ng
 
 This repository provides a production-quality Vigenère solver that fuses classical statistics, beam-search heuristics, and modern language-model scoring.  It can
 recover keys, decrypt ciphertexts, visualise key-length evidence, and benchmark different decoder backends — including KenLM character models.
