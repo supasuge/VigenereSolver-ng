@@ -1,31 +1,20 @@
-# VigenereSolver-ng
+# VigenereSolver-ng (modern edition)
 
-VigenereSolver-ng is an advanced toolkit for analyzing and breaking Vigenère ciphers, designed for cryptanalysis research and educational purposes. It combines classical statistical attacks with modern, language-model-based techniques to robustly estimate key length and recover the key, even on challenging ciphertexts.
+This repository provides a production-quality Vigenère solver that fuses classical statistics, beam-search heuristics, and modern language-model scoring.  It can
+recover keys, decrypt ciphertexts, visualise key-length evidence, and benchmark different decoder backends — including KenLM character models.
 
-A lot of the more advanced mechanisms were fully coded by ChatGPT, however it worked surprisingly well (Windowed coincidence periodogram, Jensen-Shannon divergence scoring).
+## Highlights
 
----
+- **Robust key-length inference**: FFT-based coincidence periodogram with non-maximum suppression, Jensen–Shannon strip scoring, and Kasiski factor voting.
+- **Multiple decoders**: choose between a tiny heuristic LM, an interpolated 5-gram character model, KenLM perplexity scoring, or a legacy JSD baseline.
+- **Dictionary refinement**: optional wordlist sweep to patch near-miss keys.
+- **Explainability**: export periodogram plots and IoC summaries to inspect hypotheses.
+- **Benchmark harness**: compare decoders on an auto-generated corpus of plaintext/ciphertext/key triplets.
+- **Configurable CLI**: every command can be driven from a `config.toml` file for reproducible experiments.
 
-## Key features and novel techniques
+## Installation
 
-* **Language Model Integration:** Uses high-order n-gram language models (up to 5-gram) for scoring candidate plaintexts and keys, providing much greater accuracy than traditional frequency analysis.
-* **Windowed Coincidence Periodogram:** Introduces a windowed version of the coincidence periodogram, which computes coincidence rates over sliding windows to localize and stabilize key-length signals, especially on heterogeneous or short texts.
-* **Key-Length Voting and Non-Maximum Suppression:** Implements a voting mechanism across windows and applies non-maximum suppression to robustly select likely key lengths, reducing false positives from harmonics and noise.
-* **Jensen-Shannon Divergence Scoring:** Uses JS divergence between observed and English letter distributions to weight key character votes, improving key recovery in the presence of uneven letter frequencies.
-* **Kasiski Examination with Factor Analysis:** Augments classical Kasiski examination by aggregating factors of repeated-sequence spacings, then ranks candidate key lengths by their frequency as divisors.
-* **Plaintext Generator for Testing:** Includes a generator for English-like plaintexts using real language data, enabling realistic benchmarking of attacks.
-
-These innovations make VigenereSolver-ng more effective and reliable than standard Vigenère solvers, especially on real-world ciphertexts with non-uniform content or formatting.
-
----
-
-## How to use
-
-> Requires Python 3.11+ and the project's `requirements.txt`.
-
-### Solve ciphertexts (the usual thing)
-
-1. **Install & activate env**
+The project targets **Python 3.11+**.
 
 ```bash
 python -m venv .venv
@@ -33,97 +22,104 @@ source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-2. **Put your ciphertext in a file** using triple quotes (you can have multiple blocks):
-
-```txt
-"""
-PXWZB ... ZQL
-"""
-
-"""
-ANOTHER CIPHERTEXT BLOCK...
-"""
-```
-
-3. **Run the solver**
+KenLM support requires the `kenlm` and `sentencepiece` packages plus a model directory containing `en.arpa.bin` and `en.sp.model`.  The easiest way to experiment is to build KenLM from source and convert the `test.arpa` provided in the upstream repository:
 
 ```bash
-python SolverSite/solver.py --input ciphertexts/tests.txt --passes 6 --decoder lm
+# From within the KenLM repo
+./build/bin/build_binary -a 255 -q 8 trie data/test.arpa /path/to/model/en.arpa.bin
+# Train a simple SentencePiece model on plaintext of your choice
+spm_train --input=my_corpus.txt --model_prefix=en --vocab_size=8000
+# Copy en.arpa.bin and en.sp.model into e.g. models/en/
 ```
 
-* The solver auto-tunes the window/step, tests several key lengths in parallel, and prints the best key with IoC and score.
-* Output includes a **readable plaintext** (with optional word segmentation when the original had no spaces).
+Point the solver at the directory via `--lm-path models/en`.
 
-**Speed tip:** Add `--workers <N>` to control parallelism across candidate key lengths (defaults to CPU count).
+## Command line interface
 
-**Determinism tip:** For reproducible generation experiments, use `--seed <int>`; solving itself is mostly deterministic aside from small randomization in sweeps.
+```
+python -m vigenere_solver.cli --help
+```
 
----
-
-### Generate test data
-
-Create realistic test ciphertexts (plus sidecar keys JSON):
+### Solve
 
 ```bash
-python SolverSite/solver.py --generate 5 --words 200 --out generated_ciphertexts.txt
-# -> ciphertexts in triple-quoted blocks
-# -> keys in generated_ciphertexts.txt.keys.json
+python -m vigenere_solver.cli solve --in ciphertext.txt --decoder tiny-lm
 ```
 
-Tweak key-length range with `--min-key` / `--max-key`.
+Useful flags:
 
----
+- `--decoder`: `tiny-lm`, `classic`, `kenlm`, or `legacy`.
+- `--wordlist`: dictionary path for automatic post-correction.
+- `--bm-keylens`: comma-separated key lengths to force (skips key-length inference).
+- `--explain-dir`: folder receiving a periodogram plot and JSON summary.
 
-### Encrypt a plaintext file
-
-Turn a plaintext into Vigenère ciphertext while **preserving original layout** (spacing, punctuation, case):
+### Encrypt
 
 ```bash
-python SolverSite/solver.py --encrypt-file raw_text/kafka.txt --key SECRET --out ciphertexts/kafka_ct.txt
-# If --key is omitted, a random key length [3..50] is chosen.
+python -m vigenere_solver.cli encrypt --in plaintext.txt --key SECRET
 ```
 
----
-
-### Practical tuning knobs
-
-* **Decoder:** `--decoder lm` (default, KN 3–5-gram LM) or `--decoder legacy` (χ²/JSD/ngram blend).
-* **Optimization budget:** `--passes 4..8` — more passes = more key refinement (diminishing returns beyond ~6–8).
-* **Auto window/step:** on by default; to **fix** them:
-  `--no-auto-ws --window 600 --step 150`
-* **Annealing (escape plateaus):** `--anneal 0.05` (small positive) occasionally accepts worse local moves to avoid shallow minima.
-* **LM blend weight:** `--lm-weight 0.65` mixes LM NLL with legacy fitness for final ranking.
-* **Segmentation off:** if you prefer raw, unsegmented output: `--no-seg`.
-
----
-
-### Troubleshooting quick refs
-
-* **"No ciphertext found"** → Ensure blocks are wrapped in `""" ... """` or pass raw text as a single block.
-* **Slow on huge inputs** → Lower `--passes`, use `--workers`, or temporarily `--no-auto-ws`.
-* **Weird characters** → Save files as UTF-8. Only A–Z are analyzed; other chars are preserved in-place when formatting.
-
----
-
-### How it Works
-
-* For information on how this solver works, as well as improvement's made please see the [PDF document here](https://github.com/supasuge/VigenereSolver-ng/blob/main/VigenereSolver-ng~%20How%20it%20works.pdf)
-  * I was having trouble getting the equation's to render correctly when transferring from obsidian $\to$ [README.md](https://github.com/supasuge/VigenereSolver-ng/tree/main) so I instead simply exported the documentation to a PDF and uploaded it here :)
- 
-### Web UI (In-Progress)
-- [x] **Light/Dark mode toggle**.
-- [x] **How to use**
-- [x] **How it works**
-
-Try it out yourself! 
+### Explain (analysis only)
 
 ```bash
-git clone https://github.com/supasuge/VigenereSolver-ng.git
+python -m vigenere_solver.cli explain --in ciphertext.txt --outdir reports/
 ```
 
-#### TODO
-- [ ] Better parsing/normalization where possible
-- [ ] Show top $k$ plaintext candidates
-- [ ] Better statistics display UI/UX
-- [ ] Better documentation on the "how it works page", fully describe how the pipeline works and mathematics involved at each step, turn, twist, and knob.
-- [ ] Debug `Dockerfile`/`docker-compose.yml`
+### Benchmark
+
+```bash
+python -m vigenere_solver.cli bench --corpus bench_corpus --decoders tiny-lm,classic,legacy --out results.csv
+```
+
+Use `--lm-path` when including the KenLM decoder.
+
+## Configuration file
+
+A sample `config.toml` is shipped in the repository.  Each CLI sub-command reads its matching section.  CLI arguments always win when both are present.
+
+```toml
+[solve]
+decoder = "classic"
+max_k = 32
+bm_beam = 24
+wordlist = "english_data/top_english_words_mixed_500000.txt"
+
+[bench]
+corpus = "bench_corpus"
+decoders = "tiny-lm,classic,kenlm"
+out = "bench/results.csv"
+```
+
+## Benchmark corpus
+
+`bench_corpus/` now contains up to 24 automatically generated samples (from local raw text), each with:
+
+- `plaintext.txt`
+- `ciphertext.txt`
+- `key.txt`
+
+The manifest at `bench_corpus/manifest.json` enumerates all samples.  To regenerate the corpus, run:
+
+```bash
+python scripts/generate_corpus.py
+```
+
+Then run an empirical comparison that also emits an aggregate report:
+
+```bash
+python -m vigenere_solver.cli bench --corpus bench_corpus --decoders tiny-lm,classic,legacy --out artifacts/bench/results.csv --report-out artifacts/bench/summary.json
+```
+
+## Module overview
+
+- `vigenere_solver/solver.py`: orchestrates periodogram analysis, beam search, language-model rescoring, and dictionary refinement.
+- `vigenere_solver/lm_classic.py`: interpolated n-gram character model backed by `language_data.json`.
+- `vigenere_solver/kenlm_model.py`: SentencePiece-driven KenLM perplexity wrapper.
+- `vigenere_solver/bench.py`: benchmarking harness writing per-sample CSV + aggregate JSON/Markdown summaries.
+- `scripts/generate_corpus.py`: regenerates the benchmark triplets.
+
+## License
+
+This project retains the original MIT license.
+
+

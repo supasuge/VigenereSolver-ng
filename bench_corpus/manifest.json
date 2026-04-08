@@ -1,0 +1,232 @@
+{
+  "metadata": {
+    "seed": 20260408,
+    "sample_count": 24,
+    "key_length_range": [
+      4,
+      14
+    ],
+    "sources": [
+      "raw_text/kafka.txt",
+      "raw_text/letter-raw.txt"
+    ]
+  },
+  "samples": [
+    {
+      "id": "sample_001",
+      "plaintext": "sample_001/plaintext.txt",
+      "ciphertext": "sample_001/ciphertext.txt",
+      "keyfile": "sample_001/key.txt",
+      "key": "EBPNVZJSD",
+      "key_length": 9,
+      "plaintext_length": 403
+    },
+    {
+      "id": "sample_002",
+      "plaintext": "sample_002/plaintext.txt",
+      "ciphertext": "sample_002/ciphertext.txt",
+      "keyfile": "sample_002/key.txt",
+      "key": "WIEAPSACNTSZ",
+      "key_length": 12,
+      "plaintext_length": 264
+    },
+    {
+      "id": "sample_003",
+      "plaintext": "sample_003/plaintext.txt",
+      "ciphertext": "sample_003/ciphertext.txt",
+      "keyfile": "sample_003/key.txt",
+      "key": "VHQXZPLZDO",
+      "key_length": 10,
+      "plaintext_length": 381
+    },
+    {
+      "id": "sample_004",
+      "plaintext": "sample_004/plaintext.txt",
+      "ciphertext": "sample_004/ciphertext.txt",
+      "keyfile": "sample_004/key.txt",
+      "key": "LPYUAOJBNFXK",
+      "key_length": 12,
+      "plaintext_length": 147
+    },
+    {
+      "id": "sample_005",
+      "plaintext": "sample_005/plaintext.txt",
+      "ciphertext": "sample_005/ciphertext.txt",
+      "keyfile": "sample_005/key.txt",
+      "key": "YFOQSV",
+      "key_length": 6,
+      "plaintext_length": 413
+    },
+    {
+      "id": "sample_006",
+      "plaintext": "sample_006/plaintext.txt",
+      "ciphertext": "sample_006/ciphertext.txt",
+      "keyfile": "sample_006/key.txt",
+      "key": "ETBNXNI",
+      "key_length": 7,
+      "plaintext_length": 402
+    },
+    {
+      "id": "sample_007",
+      "plaintext": "sample_007/plaintext.txt",
+      "ciphertext": "sample_007/ciphertext.txt",
+      "keyfile": "sample_007/key.txt",
+      "key": "QWMDTGRZ",
+      "key_length": 8,
+      "plaintext_length": 147
+    },
+    {
+      "id": "sample_008",
+      "plaintext": "sample_008/plaintext.txt",
+      "ciphertext": "sample_008/ciphertext.txt",
+      "keyfile": "sample_008/key.txt",
+      "key": "YRYNDQVKQEKLCK",
+      "key_length": 14,
+      "plaintext_length": 361
+    },
+    {
+      "id": "sample_009",
+      "plaintext": "sample_009/plaintext.txt",
+      "ciphertext": "sample_009/ciphertext.txt",
+      "keyfile": "sample_009/key.txt",
+      "key": "AEKEKHSHGG",
+      "key_length": 10,
+      "plaintext_length": 292
+    },
+    {
+      "id": "sample_010",
+      "plaintext": "sample_010/plaintext.txt",
+      "ciphertext": "sample_010/ciphertext.txt",
+      "keyfile": "sample_010/key.txt",
+      "key": "DJQS",
+      "key_length": 4,
+      "plaintext_length": 239
+    },
+    {
+      "id": "sample_011",
+      "plaintext": "sample_011/plaintext.txt",
+      "ciphertext": "sample_011/ciphertext.txt",
+      "keyfile": "sample_011/key.txt",
+      "key": "COGLXFAYP",
+      "key_length": 9,
+      "plaintext_length": 261
+    },
+    {
+      "id": "sample_012",
+      "plaintext": "sample_012/plaintext.txt",
+      "ciphertext": "sample_012/ciphertext.txt",
+      "keyfile": "sample_012/key.txt",
+      "key": "GJSBURRQSFNY",
+      "key_length": 12,
+      "plaintext_length": 177
+    },
+    {
+      "id": "sample_013",
+      "plaintext": "sample_013/plaintext.txt",
+      "ciphertext": "sample_013/ciphertext.txt",
+      "keyfile": "sample_013/key.txt",
+      "key": "ACNLXS",
+      "key_length": 6,
+      "plaintext_length": 342
+    },
+    {
+      "id": "sample_014",
+      "plaintext": "sample_014/plaintext.txt",
+      "ciphertext": "sample_014/ciphertext.txt",
+      "keyfile": "sample_014/key.txt",
+      "key": "UVAGAAFCXOPKBU",
+      "key_length": 14,
+      "plaintext_length": 410
+    },
+    {
+      "id": "sample_015",
+      "plaintext": "sample_015/plaintext.txt",
+      "ciphertext": "sample_015/ciphertext.txt",
+      "keyfile": "sample_015/key.txt",
+      "key": "SHIBREOBKBQD",
+      "key_length": 12,
+      "plaintext_length": 274
+    },
+    {
+      "id": "sample_016",
+      "plaintext": "sample_016/plaintext.txt",
+      "ciphertext": "sample_016/ciphertext.txt",
+      "keyfile": "sample_016/key.txt",
+      "key": "HKIOBSSESWB",
+      "key_length": 11,
+      "plaintext_length": 304
+    },
+    {
+      "id": "sample_017",
+      "plaintext": "sample_017/plaintext.txt",
+      "ciphertext": "sample_017/ciphertext.txt",
+      "keyfile": "sample_017/key.txt",
+      "key": "IGDE",
+      "key_length": 4,
+      "plaintext_length": 175
+    },
+    {
+      "id": "sample_018",
+      "plaintext": "sample_018/plaintext.txt",
+      "ciphertext": "sample_018/ciphertext.txt",
+      "keyfile": "sample_018/key.txt",
+      "key": "AKYNEVF",
+      "key_length": 7,
+      "plaintext_length": 374
+    },
+    {
+      "id": "sample_019",
+      "plaintext": "sample_019/plaintext.txt",
+      "ciphertext": "sample_019/ciphertext.txt",
+      "keyfile": "sample_019/key.txt",
+      "key": "NSZLMINFW",
+      "key_length": 9,
+      "plaintext_length": 359
+    },
+    {
+      "id": "sample_020",
+      "plaintext": "sample_020/plaintext.txt",
+      "ciphertext": "sample_020/ciphertext.txt",
+      "keyfile": "sample_020/key.txt",
+      "key": "MIFCZBNQTUDT",
+      "key_length": 12,
+      "plaintext_length": 204
+    },
+    {
+      "id": "sample_021",
+      "plaintext": "sample_021/plaintext.txt",
+      "ciphertext": "sample_021/ciphertext.txt",
+      "keyfile": "sample_021/key.txt",
+      "key": "SQUJHBMROBQ",
+      "key_length": 11,
+      "plaintext_length": 350
+    },
+    {
+      "id": "sample_022",
+      "plaintext": "sample_022/plaintext.txt",
+      "ciphertext": "sample_022/ciphertext.txt",
+      "keyfile": "sample_022/key.txt",
+      "key": "ICTUZZXMFNPXPF",
+      "key_length": 14,
+      "plaintext_length": 190
+    },
+    {
+      "id": "sample_023",
+      "plaintext": "sample_023/plaintext.txt",
+      "ciphertext": "sample_023/ciphertext.txt",
+      "keyfile": "sample_023/key.txt",
+      "key": "JZPLSSVGC",
+      "key_length": 9,
+      "plaintext_length": 229
+    },
+    {
+      "id": "sample_024",
+      "plaintext": "sample_024/plaintext.txt",
+      "ciphertext": "sample_024/ciphertext.txt",
+      "keyfile": "sample_024/key.txt",
+      "key": "LTDDRLH",
+      "key_length": 7,
+      "plaintext_length": 234
+    }
+  ]
+}

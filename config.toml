@@ -1,0 +1,33 @@
+[solve]
+decoder = "classic"
+lang = "en"
+max_k = 48
+passes = 4
+topk = 8
+seed = 1337
+bm_beam = 24
+bm_strip_top = 8
+classic_ngram_order = 5
+classic_alpha = 0.0005
+wordlist = ""
+explain_dir = ""
+
+[encrypt]
+key = "SECRET"
+
+[explain]
+outdir = "artifacts/explain"
+max_k = 48
+
+[bench]
+corpus = "bench_corpus"
+decoders = "tiny-lm,classic,legacy"
+out = "artifacts/bench/bench_results.csv"
+report_out = "artifacts/bench/bench_summary.json"
+jobs = 0
+limit = 0
+max_k = 48
+passes = 4
+bm_beam = 24
+bm_strip_top = 8
+lm_path = ""

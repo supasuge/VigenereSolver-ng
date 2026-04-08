@@ -1,0 +1,29 @@
+{
+  "tiny-lm": {
+    "samples": 12,
+    "key_accuracy": 0.8333333333333334,
+    "char_accuracy_mean": 0.23423300927025023,
+    "char_accuracy_median": 0.2239074289765534,
+    "runtime_sec_mean": 1.1028501211666704,
+    "runtime_sec_p95": 1.617001863000013,
+    "errors": 0
+  },
+  "classic": {
+    "samples": 12,
+    "key_accuracy": 1.0,
+    "char_accuracy_mean": 0.23479990269428652,
+    "char_accuracy_median": 0.2273087895207711,
+    "runtime_sec_mean": 4.0565384018333335,
+    "runtime_sec_p95": 5.609572976999999,
+    "errors": 0
+  },
+  "legacy": {
+    "samples": 12,
+    "key_accuracy": 0.4166666666666667,
+    "char_accuracy_mean": 0.23394762114239637,
+    "char_accuracy_median": 0.2239074289765534,
+    "runtime_sec_mean": 0.9750143346666652,
+    "runtime_sec_p95": 1.423873737000008,
+    "errors": 0
+  }
+}
