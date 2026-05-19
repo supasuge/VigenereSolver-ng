@@ -51,10 +51,10 @@ dev = [
 vigenere = "vigenere.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/supasuge/vigenere"
-Repository = "https://github.com/supasuge/vigenere"
-Issues = "https://github.com/supasuge/vigenere/issues"
-Changelog = "https://github.com/supasuge/vigenere/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/supasuge/VigenereSolver-ng"
+Repository = "https://github.com/supasuge/VigenereSolver-ng"
+Issues = "https://github.com/supasuge/VigenereSolver-ng/issues"
+Changelog = "https://github.com/supasuge/VigenereSolver-ng/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/vigenere"]
