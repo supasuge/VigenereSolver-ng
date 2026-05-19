@@ -508,6 +508,10 @@ solve(
 Requires Python ≥ 3.10. Runtime deps: numpy, rich.
 
 ```bash
+git clone https://github.com/supasuge/VigenereSolver-ng.git
+cd VigenereSolver-ng
+uv tool install -e .
+# `vigenere` is then globally accesible
 pip install -e ".[dev]"
 
 # or with uv
