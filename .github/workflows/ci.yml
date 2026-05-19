@@ -1,0 +1,47 @@
+name: CI
+
+# This workflow only uses trusted inputs (matrix variables, repo checkout).
+# No event payload data (titles, bodies, refs) is interpolated into run:
+# blocks, so the github-actions-injection class of bugs does not apply here.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: pytest py${{ matrix.python-version }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        include:
+          - os: macos-latest
+            python-version: "3.12"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install package and dev deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run pytest with coverage
+        run: pytest -v --cov=vigenere --cov-report=term-missing
+
+      - name: Smoke-test the CLI
+        run: |
+          echo "the quick brown fox jumps over the lazy dog" | vigenere encrypt --key LEMON > ct.txt
+          vigenere solve --in ct.txt --no-progress --json
+          vigenere explain --in ct.txt --max-k 20 > /dev/null

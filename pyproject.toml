@@ -1,0 +1,93 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vigenere"
+version = "0.1.0"
+description = "Vigenere cipher solver: FFT periodogram + Kasiski + twist++ + beam search + interpolated n-gram LM, with learned posterior weights and an adaptive 'best' ensemble."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "supasuge" }]
+keywords = [
+    "vigenere",
+    "cipher",
+    "cryptanalysis",
+    "ctf",
+    "kasiski",
+    "twist",
+    "ngram",
+    "beam-search",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Security :: Cryptography",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=1.24",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7",
+    "pytest-cov>=4",
+]
+
+[project.scripts]
+vigenere = "vigenere.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/supasuge/vigenere"
+Repository = "https://github.com/supasuge/vigenere"
+Issues = "https://github.com/supasuge/vigenere/issues"
+Changelog = "https://github.com/supasuge/vigenere/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vigenere"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"language_data.json" = "vigenere/data/language_data.json"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/vigenere",
+    "tests",
+    "scripts",
+    "language_data.json",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "pyproject.toml",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"
+
+[tool.coverage.run]
+source = ["src/vigenere"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
