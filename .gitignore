@@ -74,3 +74,5 @@ ciphertext.txt
 
 # direnv
 .envrc
+dist/
+dist

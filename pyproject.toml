@@ -3,15 +3,19 @@ requires = ["hatchling>=1.18"]
 build-backend = "hatchling.build"
 
 [project]
-name = "vigenere"
-version = "0.1.0"
+name = "vigenere-solver-ng"
+version = "0.1.1"
 description = "Vigenere cipher solver: FFT periodogram + Kasiski + twist++ + beam search + interpolated n-gram LM, with learned posterior weights and an adaptive 'best' ensemble."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "supasuge" }]
 keywords = [
+    "vigenere-ng",
     "vigenere",
+    "vigenere solver",
+    "vigenere-solver",
+    "cryptography",
     "cipher",
     "cryptanalysis",
     "ctf",
@@ -48,7 +52,7 @@ dev = [
 ]
 
 [project.scripts]
-vigenere = "vigenere.cli:main"
+vigenere-ng = "vigenere.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/supasuge/VigenereSolver-ng"

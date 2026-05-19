@@ -14,9 +14,13 @@ from typing import Mapping
 
 from .alphabet import A, SIZE
 
-# language_data.json lives at the repository root, two levels above this file
-# (src/vigenere/language.py -> repo root).
-DEFAULT_LANG_PATH = Path(__file__).resolve().parents[2] / "language_data.json"
+# language_data.json ships inside the wheel at vigenere/data/language_data.json
+# (see [tool.hatch.build.targets.wheel.force-include] in pyproject.toml). When
+# running from a source checkout the same file also lives at the repo root, so
+# we fall back to that location for development convenience.
+_BUNDLED_LANG_PATH = Path(__file__).resolve().parent / "data" / "language_data.json"
+_DEV_LANG_PATH = Path(__file__).resolve().parents[2] / "language_data.json"
+DEFAULT_LANG_PATH = _BUNDLED_LANG_PATH if _BUNDLED_LANG_PATH.exists() else _DEV_LANG_PATH
 
 
 def _norm(table: Mapping[str, float]) -> dict[str, float]:
