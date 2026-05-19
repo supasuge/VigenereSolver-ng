@@ -30,9 +30,9 @@ $p = p_0 p_1 \dots p_{n-1}$ and the key be $k = k_0 k_1 \dots k_{m-1}$
 with $m \ll n$. Then:
 
 $$
-c_i \;=\; (p_i + k_{i \bmod m}) \bmod 26
+c_i \\;=\\; (p_i + k_{i \bmod m}) \bmod 26
 \qquad
-p_i \;=\; (c_i - k_{i \bmod m}) \bmod 26
+p_i \\;=\\; (c_i - k_{i \bmod m}) \bmod 26
 $$
 
 Implemented in [alphabet.py](src/vigenere/alphabet.py) as `encrypt` /
@@ -51,8 +51,8 @@ probability that two random draws (without replacement) give the same
 letter, scaled by $c$:
 
 $$
-\mathrm{IoC}(T) \;=\; c \cdot \frac{\sum_{i=1}^{c} n_i (n_i - 1)}{N(N-1)}
-\;=\; \frac{\sum_{i=1}^{c} n_i (n_i - 1)}{N(N-1)/c}
+\mathrm{IoC}(T) \\;=\\; c \cdot \frac{\sum_{i=1}^{c} n_i (n_i - 1)}{N(N-1)}
+\\;=\\; \frac{\sum_{i=1}^{c} n_i (n_i - 1)}{N(N-1)/c}
 $$
 
 Under a uniform alphabet $\mathrm{IoC} \to 1$; English text piles mass on
@@ -64,7 +64,7 @@ measured on a pure Caesar shift of English text, so they preserve the
 English IoC. The **strip-IoC test for the key length:**
 
 $$
-\overline{\mathrm{IoC}}(m) \;=\; \frac{1}{m} \sum_{j=0}^{m-1} \mathrm{IoC}(S_j)
+\overline{\mathrm{IoC}}(m) \\;=\\; \frac{1}{m} \sum_{j=0}^{m-1} \mathrm{IoC}(S_j)
 $$
 
 We expect $\overline{\mathrm{IoC}}(m^\star) \approx 1.73$ at the true key
@@ -79,7 +79,7 @@ $x_a[t] = \mathbb{1}[\text{ciphertext}_t = a]$. The **coincidence count
 at lag $k$** is
 
 $$
-R[k] \;=\; \sum_{a \in \Sigma} \sum_{t=0}^{n-k-1} x_a[t]\, x_a[t+k]
+R[k] \\;=\\; \sum_{a \in \Sigma} \sum_{t=0}^{n-k-1} x_a[t]\, x_a[t+k]
 $$
 
 If $k$ is a multiple of the true key length $m^\star$, positions $t$ and
@@ -109,7 +109,7 @@ each repeated substring, take every distance $d$ and emit every divisor
 $k \in [2, k_{\max}]$ of $d$ as a vote:
 
 $$
-V(k) \;=\; \big|\{ (d, k) : k \mid d, \; k \in [2, k_{\max}] \}\big|
+V(k) \\;=\\; \big|\{ (d, k) : k \mid d, \\; k \in [2, k_{\max}] \}\big|
 $$
 
 Implemented in [keylength/kasiski.py](src/vigenere/keylength/kasiski.py).
@@ -130,8 +130,8 @@ each candidate $m$:
 4. The twist is the imbalance between the top and bottom halves:
 
 $$
-T(m) \;=\; \sum_{i=0}^{12} \bar P_i \;-\; \sum_{i=13}^{25} \bar P_i
-\;=\; 1 - 2 \sum_{i \geq 13} \bar P_i
+T(m) \\;=\\; \sum_{i=0}^{12} \bar P_i \\;-\\; \sum_{i=13}^{25} \bar P_i
+\\;=\\; 1 - 2 \sum_{i \geq 13} \bar P_i
 $$
 
 with $T \in [0, 1]$. Uniform $\Rightarrow 0$, English $\approx 0.70$.
@@ -139,7 +139,7 @@ with $T \in [0, 1]$. Uniform $\Rightarrow 0$, English $\approx 0.70$.
 **Twist++** subtracts the running mean of the smaller-$k$ twists:
 
 $$
-T^{++}(m) \;=\; T(m) \;-\; \frac{1}{m-1} \sum_{j=1}^{m-1} T(j)
+T^{++}(m) \\;=\\; T(m) \\;-\\; \frac{1}{m-1} \sum_{j=1}^{m-1} T(j)
 $$
 
 This penalises harmonics of the true period: $2m^\star$ also produces
@@ -165,13 +165,13 @@ $$
 Z-score the continuous ones and combine linearly, then softmax:
 
 $$
-z_i(k) \;=\; \frac{s_i(k) - \mu_i}{\sigma_i + \varepsilon},
+z_i(k) \\;=\\; \frac{s_i(k) - \mu_i}{\sigma_i + \varepsilon},
 \quad
-\ell(k) \;=\; w_1 z_1(k) + w_2 s_2(k) + w_3 z_3(k) + w_4 z_4(k)
+\ell(k) \\;=\\; w_1 z_1(k) + w_2 s_2(k) + w_3 z_3(k) + w_4 z_4(k)
 $$
 
 $$
-P(m=k \mid \text{ciphertext}) \;=\; \mathrm{softmax}_k(\ell(k))
+P(m=k \mid \text{ciphertext}) \\;=\\; \mathrm{softmax}_k(\ell(k))
 $$
 
 **The weights $(w_1,\dots,w_4)$ are learned from data** (see §11) and
@@ -186,7 +186,7 @@ $\hat q$ to the English unigram prior $\pi$ via **Jensen–Shannon
 divergence**:
 
 $$
-\mathrm{JSD}(P \| Q) \;=\; \tfrac{1}{2} D_{KL}(P \| M) + \tfrac{1}{2} D_{KL}(Q \| M),
+\mathrm{JSD}(P \| Q) \\;=\\; \tfrac{1}{2} D_{KL}(P \| M) + \tfrac{1}{2} D_{KL}(Q \| M),
 \quad M = \tfrac{1}{2}(P + Q)
 $$
 
@@ -230,7 +230,7 @@ score and the best runner-up with a *different* plaintext, normalized by
 the candidate spread:
 
 $$
-\mathrm{conf} \;=\; \mathrm{clip}_{[0,1]}\!\left(\frac{\sigma_{\text{top}} - \sigma_{\text{runner}^\star}}{\sigma_{\text{top}} - \sigma_{\text{bottom}}}\right)
+\mathrm{conf} \\;=\\; \mathrm{clip}_{[0,1]}\!\left(\frac{\sigma_{\text{top}} - \sigma_{\text{runner}^\star}}{\sigma_{\text{top}} - \sigma_{\text{bottom}}}\right)
 $$
 
 A unique winner with a clear lead gives values near 1.0; genuinely
@@ -255,15 +255,15 @@ them from labelled data $\{(\text{ct}_i, m_i^\star)\}_{i=1}^N$ by
 maximizing the log-likelihood of the true key length under the softmax:
 
 $$
-\mathcal{L}(w) \;=\; \frac{1}{N} \sum_{i=1}^{N}
+\mathcal{L}(w) \\;=\\; \frac{1}{N} \sum_{i=1}^{N}
   \log \frac{\exp(w \cdot s_i(m_i^\star))}{\sum_{k} \exp(w \cdot s_i(k))}
-\;-\; \lambda \|w\|^2
+\\;-\\; \lambda \|w\|^2
 $$
 
 The gradient has a closed form (softmax classifier):
 
 $$
-\nabla_w \mathcal{L} \;=\; \frac{1}{N} \sum_i \big( s_i(m_i^\star) - \mathbb{E}_{P_i}[s_i(k)] \big) - 2\lambda w
+\nabla_w \mathcal{L} \\;=\\; \frac{1}{N} \sum_i \big( s_i(m_i^\star) - \mathbb{E}_{P_i}[s_i(k)] \big) - 2\lambda w
 $$
 
 Plain full-batch gradient ascent, no scipy required. On a 150-sample
