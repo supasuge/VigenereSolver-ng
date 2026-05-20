@@ -47,6 +47,10 @@ coverage.xml
 .ruff_cache/
 .dmypy.json
 dmypy.json
+*.tsbuildinfo
+
+# Node / web UI
+node_modules/
 
 # IDEs
 .vscode/

@@ -1,0 +1,143 @@
+{
+  "candidate": {
+    "name": "Evan Pardon",
+    "location": "Rochester, MI",
+    "email": "evanpardon@pm.me",
+    "phone": "248-860-2491",
+    "github": "https://github.com/supasuge",
+    "linkedin": "https://linkedin.com/in/evan-pardon",
+    "portfolio": "https://supasuge.com"
+  },
+  "positioning_summary": "Cybersecurity researcher and AI/cybersecurity student with hands-on experience in AppSec, offensive tooling, CTF infrastructure, cryptanalysis, automotive security testing, and Python/Go automation.",
+  "education": [
+    "B.S. Artificial Intelligence, Cybersecurity Concentration, Oakland University, expected Dec 2028",
+    "A.A.S. Cybersecurity, Oakland Community College, Aug 2025"
+  ],
+  "certifications": [
+    "Certified AppSec Practitioner (CAP), The SecOps Group, 2024",
+    "CompTIA Security+, 2024",
+    "CompTIA Network+, 2023"
+  ],
+  "experience": [
+    {
+      "organization": "Dana Incorporated",
+      "role": "Cybersecurity Engineer Intern",
+      "dates": "May 2023 - Dec 2023",
+      "evidence": [
+        "Built Python/FastAPI key-rotation middleware integrating Azure Managed HSM for secure ECU key-management workflows.",
+        "Performed CAN/UDS on-target security testing aligned with ISO/SAE 21434.",
+        "Authored reusable test cases and onboarding documentation adopted by the team."
+      ]
+    },
+    {
+      "organization": "Fortify Vector Labs LLC",
+      "role": "Founder & Principal Consultant",
+      "dates": "Mar 2026 - Present",
+      "evidence": [
+        "Independent security lab focused on AppSec research, red-team tooling, CTF infrastructure, and AI-security experimentation.",
+        "Publishes tooling and write-ups through GitHub and portfolio."
+      ]
+    },
+    {
+      "organization": "Handshake",
+      "role": "AI Trainer / Data Annotator",
+      "dates": "Dec 2025 - Present",
+      "evidence": [
+        "Evaluates and annotates multimodal datasets for model quality, safety, and instruction-following across structured workflows."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "AutoRT",
+      "evidence": [
+        "Built a policy-driven multi-agent red-team assessment PoC using LangGraph/MCP concepts for recon, enumeration, vulnerability analysis, evidence collection, reporting, and remediation workflows."
+      ]
+    },
+    {
+      "name": "GrizzHacks8 CTF",
+      "evidence": [
+        "Built and managed self-hosted CTF infrastructure and authored challenges with public source, write-ups, and reproducible solver paths."
+      ]
+    },
+    {
+      "name": "VigenereSolver-ng",
+      "evidence": [
+        "Built a modular Python cryptanalysis toolkit using Kasiski/Friedman analysis, corpus scoring, and LLM-assisted key refinement."
+      ]
+    },
+    {
+      "name": "VeriVote",
+      "evidence": [
+        "Prototyped privacy-preserving voting flow combining homomorphic tallying, ECC signing, ring-signature concepts, and zero-knowledge authentication."
+      ]
+    }
+  ],
+  "skills": {
+    "languages": [
+      "Python",
+      "Go",
+      "Bash",
+      "SQL",
+      "C"
+    ],
+    "security": [
+      "Application security",
+      "Threat intelligence",
+      "OSINT",
+      "Cryptanalysis",
+      "CTF infrastructure",
+      "Offensive security tooling",
+      "Automotive cybersecurity",
+      "Active Directory enumeration",
+      "Security automation"
+    ],
+    "tools": [
+      "Burp Suite",
+      "Nmap",
+      "Wireshark",
+      "Ghidra",
+      "GDB",
+      "Metasploit",
+      "Nessus/OpenVAS",
+      "Hashcat/John",
+      "impacket/NetExec",
+      "Sliver",
+      "Volatility",
+      "AFL++"
+    ],
+    "standards_protocols": [
+      "MITRE ATT&CK",
+      "NIST CSF",
+      "NIST SP 800-61",
+      "OWASP Top 10",
+      "ISO/SAE 21434",
+      "TCP/IP",
+      "TLS",
+      "DNS",
+      "HTTP(S)",
+      "SMB",
+      "Kerberos",
+      "LDAP",
+      "PKI",
+      "CAN/UDS"
+    ]
+  },
+  "achievements": [
+    "Won 1st place in Hack The Box Data Dystopia at DEF CON 32 with Team L3ak.",
+    "Top 1% on TryHackMe/Hack The Box.",
+    "Founded OCC Cyber Club and grew weekly attendance from 8 to 15+.",
+    "Authored CTF challenges/infrastructure for GrizzHacks, HackDearborn, L3akCTF, and PwnSecCTF, supporting 1,000+ cumulative participants.",
+    "ISACA Detroit 2026 Student Scholarship recipient."
+  ],
+  "writing_preferences": {
+    "tone": "direct, technical, polished, confident, human",
+    "length_words": "280-420",
+    "avoid": [
+      "oversharing personal childhood stories",
+      "inflated claims",
+      "generic passion language",
+      "unverified company facts"
+    ]
+  }
+}

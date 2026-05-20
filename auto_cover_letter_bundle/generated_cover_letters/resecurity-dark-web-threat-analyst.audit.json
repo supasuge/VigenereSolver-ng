@@ -1,0 +1,56 @@
+{
+  "subject": "Application for Dark Web Threat Analyst",
+  "salutation": "Dear Resecurity Hiring Team,",
+  "body_paragraphs": [
+    "I am applying for the Dark Web Threat Analyst role at Resecurity. My background combines cybersecurity research, OSINT, Python automation, CTF infrastructure, and structured technical writing, with a focus on turning fragmented technical evidence into clear findings. Resecurity’s work in cybercrime monitoring, digital risk, and adversary activity aligns with the investigative work I have built through security research, offensive tooling, and hands-on analysis projects.",
+    "At Dana Incorporated, I worked as a Cybersecurity Engineer Intern building Python/FastAPI key-rotation middleware integrated with Azure Managed HSM for secure ECU key-management workflows. I also performed CAN/UDS on-target security testing aligned with ISO/SAE 21434 and wrote reusable test cases and onboarding documentation adopted by the team. That experience strengthened how I validate technical evidence, document repeatable procedures, and communicate security findings in a way that other analysts and engineers can use.",
+    "My CTF and research background is especially relevant to threat intelligence workflows that require source validation, adversary emulation awareness, and multi-source correlation. I built and managed self-hosted CTF infrastructure for GrizzHacks8, authored challenges with public source and reproducible solver paths, and have contributed CTF challenges and infrastructure for events supporting 1,000+ cumulative participants. I also placed 1st in Hack The Box Data Dystopia at DEF CON 32 with Team L3ak and rank in the top 1% on TryHackMe/Hack The Box. These environments have given me practical exposure to attacker tradecraft, credential abuse patterns, enumeration logic, exploitation chains, and evidence-driven reporting without relying on unsupported assumptions.",
+    "I would bring Resecurity a practical technical toolkit: Python, Go, Bash, SQL, Burp Suite, Nmap, Wireshark, Ghidra, Metasploit, Nessus/OpenVAS, Hashcat/John, impacket/NetExec, Sliver, Volatility, and familiarity with MITRE ATT&CK, NIST SP 800-61, OWASP Top 10, TCP/IP, DNS, HTTP(S), SMB, Kerberos, LDAP, TLS, and PKI. My current independent lab work through Fortify Vector Labs focuses on AppSec research, red-team tooling, CTF infrastructure, and AI-security experimentation, while my AutoRT project explores policy-driven multi-agent assessment workflows for reconnaissance, enumeration, vulnerability analysis, evidence collection, reporting, and remediation. For this role, I would apply that same disciplined approach to monitoring cybercrime ecosystems, researching ransomware and credential theft activity, correlating OSINT signals, and producing structured intelligence for stakeholders."
+  ],
+  "closing": "Thank you for your time and consideration; I would welcome the opportunity to discuss how my research and automation background can support Resecurity’s threat intelligence mission.",
+  "signature": "Evan Pardon",
+  "fit_summary": [
+    "Cybersecurity research background supported by AppSec research, CTF infrastructure, offensive tooling, cryptanalysis, and automotive security testing.",
+    "Direct alignment with required OSINT, Python automation, threat intelligence, MITRE ATT&CK awareness, and clear written communication.",
+    "Evidence of structured reporting and documentation from Dana internship, CTF write-ups, reproducible solver paths, and onboarding/test documentation.",
+    "Hands-on familiarity with attacker tradecraft through CTFs, offensive tooling, enumeration, credential-focused tools, and security automation."
+  ],
+  "keywords_used": [
+    "OSINT",
+    "dark web",
+    "threat intelligence",
+    "cybercrime",
+    "MITRE ATT&CK",
+    "Python",
+    "Python automation",
+    "ransomware",
+    "credential theft",
+    "TTPs",
+    "multi-source correlation",
+    "structured reporting",
+    "digital risk",
+    "adversary activity"
+  ],
+  "claims_used": [
+    "Candidate is applying for the Dark Web Threat Analyst role at Resecurity.",
+    "Resecurity is described in the input as a threat intelligence company focused on cybercrime monitoring, digital risk, and adversary activity.",
+    "Candidate has a cybersecurity research and AI/cybersecurity student background with hands-on experience in AppSec, offensive tooling, CTF infrastructure, cryptanalysis, automotive security testing, and Python/Go automation.",
+    "Candidate worked as a Cybersecurity Engineer Intern at Dana Incorporated from May 2023 to Dec 2023.",
+    "At Dana, candidate built Python/FastAPI key-rotation middleware integrating Azure Managed HSM for secure ECU key-management workflows.",
+    "At Dana, candidate performed CAN/UDS on-target security testing aligned with ISO/SAE 21434.",
+    "At Dana, candidate authored reusable test cases and onboarding documentation adopted by the team.",
+    "Candidate built and managed self-hosted CTF infrastructure for GrizzHacks8 and authored challenges with public source, write-ups, and reproducible solver paths.",
+    "Candidate authored CTF challenges/infrastructure for GrizzHacks, HackDearborn, L3akCTF, and PwnSecCTF, supporting 1,000+ cumulative participants.",
+    "Candidate won 1st place in Hack The Box Data Dystopia at DEF CON 32 with Team L3ak.",
+    "Candidate is top 1% on TryHackMe/Hack The Box.",
+    "Candidate has skills in Python, Go, Bash, SQL, Burp Suite, Nmap, Wireshark, Ghidra, Metasploit, Nessus/OpenVAS, Hashcat/John, impacket/NetExec, Sliver, and Volatility.",
+    "Candidate is familiar with MITRE ATT&CK, NIST SP 800-61, OWASP Top 10, TCP/IP, DNS, HTTP(S), SMB, Kerberos, LDAP, TLS, and PKI.",
+    "Candidate’s Fortify Vector Labs work focuses on AppSec research, red-team tooling, CTF infrastructure, and AI-security experimentation.",
+    "Candidate’s AutoRT project is a policy-driven multi-agent red-team assessment PoC for recon, enumeration, vulnerability analysis, evidence collection, reporting, and remediation workflows."
+  ],
+  "warnings": [
+    "The provided profile does not show direct professional dark web monitoring experience; the letter frames cybercriminal ecosystem familiarity as research-oriented and adjacent.",
+    "No web search was used, so company details are limited to the supplied job_info context.",
+    "Some candidate experiences have dates in 2025-2026; they are treated as valid because the requested date is 2026-05-19."
+  ]
+}
