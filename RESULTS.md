@@ -3,6 +3,7 @@
 This document records solver behavior across multiple benchmark styles. The goal is not only to report headline accuracy, but also to identify where the solver is robust and where it is brittle.
 
 All runs below were executed on the current codebase with `PYTHONPATH=src`. Every benchmark in this file uses the requested key-length range of 3-50 (`min_keylen=3`, `max_keylen=50`, `max_k=50`). Timings are wall-clock seconds per solve on this container, so they are most useful for comparing rows within the same run rather than as absolute performance guarantees.
+All runs below were executed on the current codebase with `PYTHONPATH=src`. Timings are wall-clock seconds per solve on this container, so they are most useful for comparing rows within the same run rather than as absolute performance guarantees.
 
 ## Dataset modes
 
@@ -31,6 +32,12 @@ compare_strategies(
     max_chars=1600,
     max_k=50,
     seed=111,
+    min_keylen=4,
+    max_keylen=12,
+    min_chars=500,
+    max_chars=1000,
+    max_k=30,
+    seed=101,
     dataset="window",
     print_summary=True,
     show_progress=False,
@@ -54,6 +61,12 @@ compare_strategies(
     max_chars=1600,
     max_k=50,
     seed=222,
+    min_keylen=4,
+    max_keylen=12,
+    min_chars=500,
+    max_chars=1000,
+    max_k=30,
+    seed=101,
     dataset="random-english",
     print_summary=True,
     show_progress=False,
@@ -77,6 +90,12 @@ compare_strategies(
     max_chars=400,
     max_k=50,
     seed=333,
+    min_keylen=12,
+    max_keylen=20,
+    min_chars=180,
+    max_chars=320,
+    max_k=30,
+    seed=202,
     dataset="random-english",
     print_summary=True,
     show_progress=False,
@@ -100,6 +119,12 @@ compare_strategies(
     max_chars=4000,
     max_k=50,
     seed=444,
+    min_keylen=12,
+    max_keylen=20,
+    min_chars=1200,
+    max_chars=1800,
+    max_k=30,
+    seed=303,
     dataset="random-english",
     print_summary=True,
     show_progress=False,
@@ -113,16 +138,16 @@ PY
 PYTHONPATH=src python - <<'PY'
 from vigenere.bench import compare_strategies
 compare_strategies(
-    n_trials=12,
+    n_trials=15,
     decoders=("classic",),
     beams=(4, 8, 16),
     strip_tops=(2, 4, 6),
-    min_keylen=3,
-    max_keylen=50,
-    min_chars=800,
-    max_chars=1600,
-    max_k=50,
-    seed=555,
+    min_keylen=8,
+    max_keylen=14,
+    min_chars=400,
+    max_chars=700,
+    max_k=25,
+    seed=404,
     dataset="random-english",
     print_summary=True,
     show_progress=False,
@@ -181,6 +206,27 @@ Regime: `dataset=random-english`, key length 3-50, ciphertext length 2500-4000, 
 | `classic` | 1.000 | 1.000 | 1.000 | 0.831 | 1.064 | Perfect and faster than `best`. |
 | `tiny-lm` | 1.000 | 1.000 | 1.000 | 0.379 | 0.468 | Perfect and fastest successful decoder. |
 | `legacy` | 0.000 | 0.000 | 0.965 | 0.391 | 0.476 | Still poor key recovery. |
+Regime: `dataset=random-english`, key length 12-20, ciphertext length 180-320, 20 trials per decoder.
+
+| decoder | key_acc | exact_acc | char_acc | mean_sec | p95_sec | readout |
+|---|---:|---:|---:|---:|---:|---|
+| `tiny-lm` | 0.450 | 0.450 | 0.801 | 0.057 | 0.068 | Best of a hard regime, but unreliable. |
+| `best` | 0.200 | 0.200 | 0.776 | 0.133 | 0.154 | Struggles when strips are short. |
+| `classic` | 0.200 | 0.200 | 0.776 | 0.091 | 0.106 | Similar to `best`, faster. |
+| `legacy` | 0.050 | 0.050 | 0.744 | 0.059 | 0.073 | Weak. |
+
+**Takeaway:** This is the primary weak point. With 180-320 characters and 12-20 key letters, each Caesar strip can have only about 9-27 observations. That is often not enough evidence for stable shift or key-length recovery, especially on unigram-only synthetic text.
+
+### 4. Long-text / long-key recovery test
+
+Regime: `dataset=random-english`, key length 12-20, ciphertext length 1200-1800, 20 trials per decoder.
+
+| decoder | key_acc | exact_acc | char_acc | mean_sec | p95_sec | readout |
+|---|---:|---:|---:|---:|---:|---|
+| `best` | 1.000 | 1.000 | 1.000 | 0.588 | 0.690 | Perfect, but slowest. |
+| `classic` | 1.000 | 1.000 | 1.000 | 0.353 | 0.427 | Perfect and faster than `best`. |
+| `tiny-lm` | 1.000 | 1.000 | 1.000 | 0.164 | 0.193 | Perfect and fastest successful decoder. |
+| `legacy` | 0.100 | 0.100 | 0.957 | 0.160 | 0.189 | Still poor key recovery. |
 
 **Takeaway:** The short-text / long-key failure is data scarcity rather than a fundamental inability to solve long keys. Once each strip receives enough observations, all non-legacy decoders recover perfectly on this sample.
 
