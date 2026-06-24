@@ -127,6 +127,7 @@ def _cmd_compare(args: argparse.Namespace) -> int:
         max_k=args.max_k, seed=args.seed, jobs=args.jobs,
         out_csv=args.out,
         show_progress=not args.no_progress,
+        dataset=args.dataset,
     )
     return 0
 
@@ -195,6 +196,7 @@ def _cmd_gen_corpus(args: argparse.Namespace) -> int:
         min_chars=args.min_chars,
         max_chars=args.max_chars,
         seed=args.seed,
+        dataset=args.dataset,
     )
     print(f"wrote {n} samples to {args.out}")
     return 0
@@ -285,6 +287,8 @@ def build_parser() -> argparse.ArgumentParser:
     pc.add_argument("--seed", type=int, default=None)
     pc.add_argument("--jobs", type=int, default=0)
     pc.add_argument("--out", default=None, help="Optional CSV path for per-trial rows")
+    pc.add_argument("--dataset", choices=["window", "random-english"], default="window",
+                    help="Plaintext dataset: corpus windows or fully random English-like letters")
     pc.add_argument("--no-progress", action="store_true")
     pc.set_defaults(func=_cmd_compare)
 
@@ -328,6 +332,8 @@ def build_parser() -> argparse.ArgumentParser:
     pg.add_argument("--min-chars", type=int, default=400)
     pg.add_argument("--max-chars", type=int, default=1200)
     pg.add_argument("--seed", type=int, default=0)
+    pg.add_argument("--dataset", choices=["window", "random-english"], default="window",
+                    help="Plaintext dataset: corpus windows or fully random English-like letters")
     pg.set_defaults(func=_cmd_gen_corpus)
 
     return p

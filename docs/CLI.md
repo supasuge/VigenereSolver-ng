@@ -39,6 +39,8 @@ vigenere explain --in ciphertext.txt --max-k 40
 
 ```bash
 vigenere gen-corpus --out bench_corpus --n 20 --seed 0
+# Fully randomized English-like plaintexts (corpus-derived unigram frequencies):
+vigenere gen-corpus --out random_english_corpus --n 20 --dataset random-english --seed 0
 vigenere bench --corpus bench_corpus \
                --decoders legacy,tiny-lm,classic,best \
                --out bench.csv --jobs 8
@@ -52,6 +54,8 @@ vigenere compare --trials 30 --jobs 8 \
                  --beams 8,16,24 --strip-tops 4,6,8 \
                  --min-keylen 5 --max-keylen 10 \
                  --max-k 30 --seed 0 --out compare.csv
+# Use --dataset random-english to benchmark i.i.d. English-like plaintexts
+# instead of contiguous windows from the bundled corpus.
 ```
 
 ## `tune` — learn posterior weights

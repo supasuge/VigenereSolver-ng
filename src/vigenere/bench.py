@@ -11,9 +11,11 @@ Two complementary entry points:
   configurable number of trials per cell. Prints a ranking summary and
   returns the per-trial rows.
 
-Plaintext is sampled from :mod:`vigenere.data.corpus` (public-domain
-English). Keys are uniformly random over A..Z with a uniformly random
-length in the configured range.
+Plaintext can be sampled either as contiguous windows from
+:mod:`vigenere.data.corpus` (public-domain English) or as a fully random
+English-like stream drawn from corpus-derived unigram frequencies. Keys are
+uniformly random over A..Z with a uniformly random length in the configured
+range.
 """
 from __future__ import annotations
 
@@ -29,12 +31,46 @@ from pathlib import Path
 from typing import Sequence
 
 from . import solve
-from .alphabet import clean_letters, decrypt, encrypt, random_key
+from .alphabet import ALPHABET, clean_letters, decrypt, encrypt, random_key
 from .data.corpus import CORPUS_ALL
 from .match import classify_match
 
 # Re-export for tests that historically imported SAMPLE_TEXT from here.
 SAMPLE_TEXT = CORPUS_ALL
+
+
+# Corpus-derived unigram probabilities for fully randomized English-like data.
+_SOURCE_LETTERS = clean_letters(CORPUS_ALL)
+_COUNTS = {ch: _SOURCE_LETTERS.count(ch) for ch in ALPHABET}
+_ENGLISH_WEIGHTS = tuple(_COUNTS[ch] for ch in ALPHABET)
+DATASETS = ("window", "random-english")
+
+
+def random_english_letters(length: int, rng: random.Random) -> str:
+    """Return an i.i.d. English-like letter stream of exactly ``length`` chars.
+
+    The distribution is estimated from the bundled public-domain corpus, but
+    samples are not contiguous corpus excerpts. This is useful for stress tests
+    where every plaintext is fully randomized while still preserving English
+    unigram bias for classical cryptanalysis.
+    """
+    if length < 0:
+        raise ValueError("length must be non-negative")
+    return "".join(rng.choices(ALPHABET, weights=_ENGLISH_WEIGHTS, k=length))
+
+
+def _plaintext_sample(rng: random.Random, nchars: int, dataset: str) -> str:
+    if dataset == "window":
+        source = _SOURCE_LETTERS
+        if len(source) < nchars:
+            raise ValueError(
+                f"corpus source too short ({len(source)}) for nchars={nchars}"
+            )
+        start = rng.randint(0, len(source) - nchars)
+        return source[start : start + nchars]
+    if dataset == "random-english":
+        return random_english_letters(nchars, rng)
+    raise ValueError(f"unknown dataset {dataset!r}; expected one of {DATASETS}")
 
 
 @dataclass
@@ -43,6 +79,7 @@ class Sample:
     plaintext: str
     ciphertext: str
     key: str
+    dataset: str = "window"
 
 
 # ---------------------------------------------------------------------------
@@ -57,15 +94,17 @@ def generate_corpus(
     min_chars: int = 400,
     max_chars: int = 1200,
     seed: int = 0,
+    dataset: str = "window",
 ) -> int:
     """Write `n_samples` plaintext/ciphertext/key triples + manifest.json."""
     rng = random.Random(seed)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    source = clean_letters(CORPUS_ALL)
-    if len(source) < max_chars:
+    if dataset not in DATASETS:
+        raise ValueError(f"unknown dataset {dataset!r}; expected one of {DATASETS}")
+    if dataset == "window" and len(_SOURCE_LETTERS) < max_chars:
         raise ValueError(
-            f"corpus source too short ({len(source)}) for max_chars={max_chars}"
+            f"corpus source too short ({len(_SOURCE_LETTERS)}) for max_chars={max_chars}"
         )
 
     entries: list[dict] = []
@@ -74,8 +113,7 @@ def generate_corpus(
         sdir = out / sid
         sdir.mkdir(exist_ok=True)
         nchars = rng.randint(min_chars, max_chars)
-        start = rng.randint(0, len(source) - nchars)
-        pt = source[start : start + nchars]
+        pt = _plaintext_sample(rng, nchars, dataset)
         klen = rng.randint(min_keylen, max_keylen)
         key = random_key(klen, rng)
         ct = encrypt(pt, key)
@@ -86,10 +124,11 @@ def generate_corpus(
             "id": sid, "plaintext": f"{sid}/plaintext.txt",
             "ciphertext": f"{sid}/ciphertext.txt",
             "key": key, "keylen": klen, "nchars": nchars,
+            "dataset": dataset,
         })
 
     (out / "manifest.json").write_text(
-        json.dumps({"samples": entries}, indent=2), encoding="utf-8"
+        json.dumps({"dataset": dataset, "samples": entries}, indent=2), encoding="utf-8"
     )
     return len(entries)
 
@@ -103,6 +142,7 @@ def load_manifest(corpus_dir: str | Path) -> list[Sample]:
             plaintext=(corpus_dir / e["plaintext"]).read_text(encoding="utf-8"),
             ciphertext=(corpus_dir / e["ciphertext"]).read_text(encoding="utf-8"),
             key=str(e["key"]).upper(),
+            dataset=str(e.get("dataset", data.get("dataset", "window"))),
         )
         for e in data["samples"]
     ]
@@ -148,7 +188,7 @@ def _evaluate_sample(
         )
         dt = time.perf_counter() - t0
         return {
-            "id": sample.sid, "decoder": decoder,
+            "id": sample.sid, "dataset": sample.dataset, "decoder": decoder,
             "beam": beam, "strip_top": strip_top,
             "runtime_sec": round(dt, 4),
             "key_true": sample.key, "key_pred": res.key,
@@ -161,7 +201,7 @@ def _evaluate_sample(
         }
     except Exception as exc:
         return {
-            "id": sample.sid, "decoder": decoder,
+            "id": sample.sid, "dataset": sample.dataset, "decoder": decoder,
             "beam": beam, "strip_top": strip_top,
             "runtime_sec": round(time.perf_counter() - t0, 4),
             "key_true": sample.key, "key_pred": "<error>",
@@ -282,15 +322,14 @@ def _run_tasks(
 
 def _random_sample(rng: random.Random, sid: str,
                    min_chars: int, max_chars: int,
-                   min_keylen: int, max_keylen: int) -> Sample:
-    source = clean_letters(CORPUS_ALL)
+                   min_keylen: int, max_keylen: int,
+                   dataset: str = "window") -> Sample:
     nchars = rng.randint(min_chars, max_chars)
-    start = rng.randint(0, len(source) - nchars)
-    pt = source[start : start + nchars]
+    pt = _plaintext_sample(rng, nchars, dataset)
     klen = rng.randint(min_keylen, max_keylen)
     key = random_key(klen, rng)
     ct = encrypt(pt, key)
-    return Sample(sid=sid, plaintext=pt, ciphertext=ct, key=key)
+    return Sample(sid=sid, plaintext=pt, ciphertext=ct, key=key, dataset=dataset)
 
 
 def compare_strategies(
@@ -309,6 +348,7 @@ def compare_strategies(
     out_csv: str | None = None,
     print_summary: bool = True,
     show_progress: bool = True,
+    dataset: str = "window",
 ) -> list[dict]:
     """Run an in-memory grid of (decoder x beam x strip_top) x n_trials.
 
@@ -316,7 +356,8 @@ def compare_strategies(
     """
     rng = random.Random(seed)
     samples = [_random_sample(rng, f"trial_{i:04d}",
-                              min_chars, max_chars, min_keylen, max_keylen)
+                              min_chars, max_chars, min_keylen, max_keylen,
+                              dataset)
                for i in range(n_trials)]
 
     grid = list(product(decoders, beams, strip_tops))
@@ -337,7 +378,7 @@ def compare_strategies(
 # ---------------------------------------------------------------------------
 
 _FIELDNAMES = [
-    "id", "decoder", "beam", "strip_top", "runtime_sec",
+    "id", "dataset", "decoder", "beam", "strip_top", "runtime_sec",
     "key_true", "key_pred", "key_match", "exact_key", "keylen_match",
     "char_accuracy", "score", "error",
 ]
