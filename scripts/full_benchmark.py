@@ -49,7 +49,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from vigenere import decrypt, encrypt, solve  # noqa: E402
-from vigenere.alphabet import clean_letters, random_key  # noqa: E402
+from vigenere.alphabet import ALPHABET, clean_letters, random_key  # noqa: E402
 from vigenere.data.corpus import CORPUS_ALL  # noqa: E402
 from vigenere.match import classify_match  # noqa: E402
 from vigenere.optimize import optimize_parameters  # noqa: E402
@@ -61,6 +61,9 @@ from vigenere.tune import tune_weights  # noqa: E402
 
 SYSRAND = secrets.SystemRandom()
 SOURCE = clean_letters(CORPUS_ALL)
+COUNTS = {ch: SOURCE.count(ch) for ch in ALPHABET}
+ENGLISH_WEIGHTS = tuple(COUNTS[ch] for ch in ALPHABET)
+DATASETS = ("window", "random-english")
 
 
 @dataclass(frozen=True)
@@ -71,34 +74,44 @@ class Sample:
     key: str
     keylen: int
     nchars: int
+    dataset: str = "window"
+
+
+def _random_plaintext(nchars: int, dataset: str) -> str:
+    if dataset == "window":
+        if nchars >= len(SOURCE):
+            nchars = len(SOURCE) - 1
+        start = SYSRAND.randint(0, len(SOURCE) - nchars)
+        return SOURCE[start: start + nchars]
+    if dataset == "random-english":
+        return "".join(SYSRAND.choices(ALPHABET, weights=ENGLISH_WEIGHTS, k=nchars))
+    raise ValueError(f"unknown dataset {dataset!r}; expected one of {DATASETS}")
 
 
 def make_random_sample(
     keylen: int,
     nchars: int,
     sid: str,
+    dataset: str = "window",
 ) -> Sample:
-    """Cryptographically random sample: random window from the bundled
-    corpus, uniform random key over A..Z of length `keylen`."""
-    if nchars >= len(SOURCE):
-        nchars = len(SOURCE) - 1
-    start = SYSRAND.randint(0, len(SOURCE) - nchars)
-    pt = SOURCE[start: start + nchars]
+    """Cryptographically random sample with uniform random key over A..Z."""
+    pt = _random_plaintext(nchars, dataset)
     key = random_key(keylen, SYSRAND)
     return Sample(sid=sid, plaintext=pt, ciphertext=encrypt(pt, key),
-                  key=key, keylen=keylen, nchars=nchars)
+                  key=key, keylen=keylen, nchars=nchars, dataset=dataset)
 
 
 def make_sample_grid(
     keylens: Sequence[int],
     nchars: int,
     n_per_keylen: int,
+    dataset: str = "window",
 ) -> list[Sample]:
     """Produce a balanced grid: `n_per_keylen` samples per requested keylen."""
     out: list[Sample] = []
     for k in keylens:
         for i in range(n_per_keylen):
-            out.append(make_random_sample(k, nchars, f"k{k:02d}_{i:03d}"))
+            out.append(make_random_sample(k, nchars, f"k{k:02d}_{i:03d}", dataset))
     return out
 
 
@@ -118,7 +131,7 @@ def _evaluate(args) -> dict:
         m = classify_match(res.key, sample.key)
         pt_match = res.plaintext == sample.plaintext
         return {
-            "id": sample.sid, "decoder": decoder,
+            "id": sample.sid, "dataset": sample.dataset, "decoder": decoder,
             "keylen": sample.keylen, "nchars": sample.nchars,
             "runtime_sec": round(dt, 4),
             "key_true": sample.key, "key_pred": res.key,
@@ -133,7 +146,7 @@ def _evaluate(args) -> dict:
         }
     except Exception as exc:
         return {
-            "id": sample.sid, "decoder": decoder,
+            "id": sample.sid, "dataset": sample.dataset, "decoder": decoder,
             "keylen": sample.keylen, "nchars": sample.nchars,
             "runtime_sec": round(time.perf_counter() - t0, 4),
             "key_true": sample.key, "key_pred": "<error>",
@@ -273,6 +286,8 @@ def main(argv: list[str] | None = None) -> int:
                    help="Samples per key length (default: 25, or 8 with --quick)")
     p.add_argument("--nchars", type=int, default=1000,
                    help="Plaintext window size (chars). Larger = easier.")
+    p.add_argument("--dataset", choices=DATASETS, default="random-english",
+                   help="Plaintext dataset (default: %(default)s for fully random English-like letters)")
     p.add_argument("--decoders", default="legacy,tiny-lm,classic,best",
                    help="CSV of decoders to compare")
     p.add_argument("--tune-n", type=int, default=None,
@@ -306,6 +321,7 @@ def main(argv: list[str] | None = None) -> int:
     _stderr(f"  keylens      = {keylens}  ({n_per_kl} samples each = {len(keylens)*n_per_kl} total)")
     _stderr(f"  nchars       = {args.nchars}")
     _stderr(f"  decoders     = {decoders}")
+    _stderr(f"  dataset      = {args.dataset}")
     _stderr(f"  max_k        = {args.max_k}")
     _stderr(f"  jobs         = {args.jobs}")
 
@@ -316,12 +332,12 @@ def main(argv: list[str] | None = None) -> int:
                 f"{tune_epochs} epochs)...")
         tune_examples = [
             (s.ciphertext, s.keylen)
-            for s in make_sample_grid(keylens, args.nchars, max(1, tune_n // len(keylens)))
+            for s in make_sample_grid(keylens, args.nchars, max(1, tune_n // len(keylens)), args.dataset)
         ]
         # Top up to tune_n with extra random samples
         while len(tune_examples) < tune_n:
             k = SYSRAND.choice(keylens)
-            s = make_random_sample(k, args.nchars, f"tune_extra_{len(tune_examples)}")
+            s = make_random_sample(k, args.nchars, f"tune_extra_{len(tune_examples)}", args.dataset)
             tune_examples.append((s.ciphertext, s.keylen))
 
         t_res = tune_weights(
@@ -387,14 +403,14 @@ def main(argv: list[str] | None = None) -> int:
         _stderr(f"  -> {out / 'optimize.json'}")
 
     # ---- Phase 3: full side-by-side benchmark ----
-    samples = make_sample_grid(keylens, args.nchars, n_per_kl)
+    samples = make_sample_grid(keylens, args.nchars, n_per_kl, args.dataset)
     _stderr(f"\n[3/3] Side-by-side benchmark: "
             f"{len(samples)} samples x {len(decoders)} decoders "
             f"= {len(samples)*len(decoders)} trials...")
     rows = run_evaluation(samples, decoders, args.max_k, beam, strip_top, args.jobs)
 
     fieldnames = [
-        "id", "decoder", "keylen", "nchars", "runtime_sec",
+        "id", "dataset", "decoder", "keylen", "nchars", "runtime_sec",
         "key_true", "key_pred", "match_kind", "match_distance",
         "key_match", "exact_key", "key_close", "plaintext_match",
         "confidence", "error",
